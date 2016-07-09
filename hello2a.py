@@ -34,6 +34,8 @@ def get_user(id):
 		abort(404)
 	return '<h1>hello.%s</h1>' % user.name
 
+don't worry it's just a test
+
 '''
 if __name__ == '__main__':
 	manager.run()
