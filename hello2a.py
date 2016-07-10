@@ -1,16 +1,26 @@
-from flask import Flask,request,make_response,redirect,abort
+from flask import Flask,request,make_response,redirect,abort,render_template
 from flask.ext.script import Manager
 
 app = Flask(__name__)
 manager = Manager(app)
 
-@app.route('/')
-def index():
+
+@app.route('/agent')
+def agent():
 	user_agent = request.headers.get('User_Agent')
 	return "<h1> Hello World!</h1><p>your browser is %s</p><p>%s</p>"%(user_agent,app.url_map)
+
+
+'''
+@app.route('/')
+def index():
+	return render_template('index.html')
+
 @app.route('/user/<name>')
 def user(name):
-	return '<h1> Hello,%s!</h1>'%name
+	return render_template('user.html',name = name)
+'''
+
 
 @app.route('/test1')
 def test1():
@@ -25,6 +35,8 @@ def test2():
 @app.route('/test3')
 def test3():
 	return redirect('http://localhost:5000')
+
+
 
 '''
 @app.route('/user/<int:id>')
