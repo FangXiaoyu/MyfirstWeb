@@ -11,7 +11,7 @@ def agent():
 	return "<h1> Hello World!</h1><p>your browser is %s</p><p>%s</p>"%(user_agent,app.url_map)
 
 
-'''
+
 @app.route('/')
 def index():
 	return render_template('index.html')
@@ -19,7 +19,7 @@ def index():
 @app.route('/user/<name>')
 def user(name):
 	return render_template('user.html',name = name)
-'''
+
 
 
 @app.route('/test1')
