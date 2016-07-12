@@ -1,4 +1,4 @@
-from flask import Flask,request,make_response,redirect,abort,render_template
+from flask import Flask,request,make_response,redirect,abort,render_template,session,url_for
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
@@ -35,12 +35,11 @@ def agent():
 
 @app.route('/',methods=['GET','POST'])
 def index():
-	name = None
 	form = NameForm()
 	if form.validate_on_submit():
-		name = form.name.data
-		form.name.data = ''
-	return render_template('index.html',current_time = datetime.utcnow(),form = form,name = name)
+		session['name'] = form.name.data
+		return redirect(url_for('index'))
+	return render_template('index.html',current_time = datetime.utcnow(),form = form,name = session.get('name'))
 
 @app.route('/user/<name>')
 def user(name):
