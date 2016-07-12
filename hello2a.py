@@ -1,4 +1,4 @@
-from flask import Flask,request,make_response,redirect,abort,render_template
+from flask import Flask,request,make_response,redirect,abort,render_template,
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.moment import Moment
