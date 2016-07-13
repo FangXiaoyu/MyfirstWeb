@@ -1,3 +1,4 @@
+import os
 from flask import Flask,request,make_response,redirect,abort,render_template,session,url_for,flash
 from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
@@ -6,16 +7,43 @@ from datetime import datetime
 from flask.ext.wtf import Form
 from wtforms import StringField,SubmitField
 from wtforms.validators import Required
+from flask.ext.sqlalchemy import SQLALchemy
 
-class NameForm(Form):
-	name = StringField('What is your name?',validators = [Required()])
-	submit = SubmitField('Submit')
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 manager = Manager(app)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 app.config['SECRET_KEY'] = 'hard to guess string'
+app.config['SQLALCHEMY_DATABASE_URI']=\
+	'sqlite:///'+os.path.join(basedir,'data.sqlite')
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+db = SQLALchemy(app)
+
+
+class NameForm(Form):
+	name = StringField('What is your name?',validators = [Required()])
+	submit = SubmitField('Submit')
+class Role(db.Modle):
+	__tablename__ = 'roles'
+	id = db.Column(db.Integer,primary_key = True)
+	name = db.Column(db.String(64),unique = True)
+
+	def __repr__(self):
+		return '<Role %r>' % self.name
+	users = db.relationship('User',backref = 'role')
+
+
+class User(db.Modle):
+	__tablename__ = 'users'
+	id = db.Column(db.Integer,primary_key = True)
+	username = db.Column(db.String,unique = True)
+
+	def __repr__(self):
+		return '<User %r>' % self.username
+	role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))
+
 
 
 @app.errorhandler(404)
